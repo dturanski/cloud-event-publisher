@@ -16,11 +16,7 @@
 
 package org.dturanski.cloudevents.publisher;
 
-import java.util.function.Function;
-
-import io.cloudevents.CloudEvent;
 import io.netty.channel.ChannelOption;
-import javax.xml.crypto.Data;
 import reactor.netty.http.client.HttpClient;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -40,7 +36,7 @@ public class CloudEventsPublisherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public CloudEventsClient cloudEventsClient(WebClient webClient, DefaultCloudEventMapper mapper) {
-		CloudEventsClient cloudEventsClient = new CloudEventsClient(webClient,mapper);
+		CloudEventsClient cloudEventsClient = new CloudEventsClient(webClient, mapper);
 		return cloudEventsClient;
 	}
 
@@ -49,7 +45,7 @@ public class CloudEventsPublisherAutoConfiguration {
 		HttpClient httpClient = HttpClient.create()
 			.tcpConfiguration(client ->
 				properties.getTimeoutMs() > 0 ?
-					client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.getTimeoutMs()): client);
+					client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.getTimeoutMs()) : client);
 
 		return WebClient.builder()
 			.clientConnector(new ReactorClientHttpConnector(httpClient))

@@ -53,7 +53,8 @@ public class CloudEventsClient {
 		return webclient.post()
 			.contentType(MediaType.parseMediaType(CLOUD_EVENT_CONTENT_TYPE))
 			.syncBody(cloudEvent)
-			.exchange() .doOnNext(response -> {
+			.exchange()
+			.doOnNext(response -> {
 				HttpStatus httpStatus = response.statusCode();
 				if (httpStatus.is4xxClientError() || httpStatus.is5xxServerError()) {
 					throw WebClientResponseException.create(
