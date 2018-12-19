@@ -1,0 +1,12 @@
+= Cloud Events Publisher
+
+This library provides Spring Boot auto configuration for a `CloudEventsPublisher` component, which publishes https://cloudevents.io/[Cloud Events] via http.
+
+The `cloud-events-publisher` is configured by the following properties:
+
+* *cloudevents.publisher.target-uri* - The URI of a service consuming Cloud Events
+* *cloudevents.publisher.timeout-ms* - Request time out in MS.
+* *io.cloudevents.event.type* - A String identifier
+* *io.cloudevents.event.source* - A URI identifier
+* *io.cloudevents.event.content-type* - The content-type of the event data
+

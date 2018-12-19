@@ -2,7 +2,6 @@ package org.dturanski.cloudevents.sample;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -10,7 +9,7 @@ import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.cloudevents.publisher.DefaultCloudEventMapper;
-import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
+import org.dturanski.cloudevents.publisher.WebClientProperties;
 import reactor.core.publisher.Flux;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +39,15 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 		return () -> Flux.interval(Duration.ofSeconds(1)).map(l -> "Hello World");
 	}
 
+	@Autowired
+	WebClientProperties webClientProperties;
+
 	@Override
 	public void run(String... args) {
+
 		sampleSource().get().subscribe(data -> {
-			log.info("Posting data {}", data);
 			CloudEvent cloudEvent = mapper.apply(data);
-			log.info("time {}", ZonedDateTime.now());
-			log.info("Posting data {}", cloudEvent);
+			log.info("Posting cloud event {} to {}", cloudEvent, webClientProperties.getTargetUri());
 			cloudEventsPublisher.convertAndPost(cloudEvent)
 				.subscribe(
 					response -> log.info("status {}", response.statusCode())

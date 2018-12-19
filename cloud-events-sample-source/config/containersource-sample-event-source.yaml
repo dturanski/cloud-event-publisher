@@ -4,10 +4,11 @@ metadata:
   labels:
     controller-tools.k8s.io: "1.0"
   name: cloud-event-source
+#
+# Edit the image repository and tag accordingly
+#
 spec:
-  image: gcr.io/triple-rookery-118122/sample-event-source
-  args:
-   - '--cloudevents.publisher.target-uri=http://qux-1-channel.default.svc.cluster.local'
+  image: gcr.io/<your-GCP-project>/sample-event-source:0.0.1-SNAPSHOT
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
     kind: Channel
