@@ -1,0 +1,31 @@
+= Knative Sample Event Source
+
+A Spring Boot Application that generates Cloud Events using the `cloud-event-publisher` component.
+
+== Prerequisites
+
+* These instructions pertain to for https://docs.pivotal.io/pfs/index.html[PFS] https://docs.pivotal.io/pfs/install-on-pks.html[installed on PKS] running on Google Cloud Platform (GCP)
+* Docker CLI with GCR credentials configured
+
+== Build
+
+Install the `cloud-events-publisher` library.
+
+
+
+```
+cd ../cloud-events-publisher
+./mvnw clean install
+
+```
+
+Build and push the docker image to GCR. Provide your GCP project as a property.
+
+```
+cd ../cloud-events-sample-source
+./mvnw clean package jib:build -Dgcp.project=<your GCP project>
+```
+
+== Run
+
+You can run the app standalone, by default it generates and pubishes Cloud Events to an internal endpoint `http://localhost:8080/events`.

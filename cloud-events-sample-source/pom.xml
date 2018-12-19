@@ -31,7 +31,7 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -39,33 +39,19 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.14.2</version>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>0.10.1</version>
 				<configuration>
-					<images>
-						<image>
-							<name>${docker.org}/${project.artifactId}:${docker.version}</name>
-							<build>
-								<from>springcloud/openjdk</from>
-								<volumes>
-									<volume>/tmp</volume>
-								</volumes>
-								<entryPoint>
-									<exec>
-										<arg>java</arg>
-										<arg>-jar</arg>
-										<arg>/maven/cloud-events-source.jar</arg>
-									</exec>
-								</entryPoint>
-								<assembly>
-									<descriptor>assembly.xml</descriptor>
-								</assembly>
-							</build>
-						</image>
-					</images>
+					<from>
+						<image>springcloud/openjdk</image>
+					</from>
+					<to>
+						<image>gcr.io/${gcp.project}/sample-event-source</image>
+					</to>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

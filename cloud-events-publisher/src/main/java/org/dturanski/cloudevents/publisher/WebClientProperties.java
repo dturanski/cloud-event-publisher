@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author David Turanski
  **/
-@ConfigurationProperties(prefix = "web.client")
+@ConfigurationProperties(prefix = "cloudevents.publisher")
 @Data
 public class WebClientProperties {
 

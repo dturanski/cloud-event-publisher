@@ -1,0 +1,14 @@
+apiVersion: sources.eventing.knative.dev/v1alpha1
+kind: ContainerSource
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: cloud-event-source
+spec:
+  image: gcr.io/triple-rookery-118122/sample-event-source
+  args:
+   - '--cloudevents.publisher.target-uri=http://qux-1-channel.default.svc.cluster.local'
+  sink:
+    apiVersion: eventing.knative.dev/v1alpha1
+    kind: Channel
+    name: qux-1

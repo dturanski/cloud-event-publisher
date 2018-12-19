@@ -17,10 +17,15 @@
 package org.dturanski.cloudevents.publisher;
 
 import io.cloudevents.CloudEvent;
+import reactor.core.publisher.Mono;
+
+import org.springframework.web.reactive.function.client.ClientResponse;
 
 /**
  * @author David Turanski
  **/
-public interface CloudEventPublisher<T extends Object> {
-	CloudEvent publish(T data);
+public interface CloudEventPublisher {
+	CloudEvent publish(Object data);
+
+	Mono<ClientResponse> convertAndPost(Object data);
 }

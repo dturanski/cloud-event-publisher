@@ -1,7 +1,6 @@
 package org.dturanski.cloudevents.sample;
 
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -9,8 +8,9 @@ import java.util.function.Supplier;
 
 import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.dturanski.cloudevents.publisher.CloudEventsClient;
+import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.cloudevents.publisher.DefaultCloudEventMapper;
+import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
 import reactor.core.publisher.Flux;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	private CloudEventsClient cloudEventsClient;
+	private CloudEventPublisher cloudEventsPublisher;
 
 	@Autowired
 	private DefaultCloudEventMapper mapper;
@@ -41,13 +41,13 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args) {
 		sampleSource().get().subscribe(data -> {
 			log.info("Posting data {}", data);
 			CloudEvent cloudEvent = mapper.apply(data);
 			log.info("time {}", ZonedDateTime.now());
 			log.info("Posting data {}", cloudEvent);
-			cloudEventsClient.postCloudEvent(cloudEvent)
+			cloudEventsPublisher.convertAndPost(cloudEvent)
 				.subscribe(
 					response -> log.info("status {}", response.statusCode())
 				);
@@ -58,9 +58,9 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 	//TODO: Parsing error with "time" field when parsing argument as CloudEvent
 	public void postCloudEvent(@RequestBody Map<String, Object> cloudEvent) {
 
-		long time = (long)((Double)cloudEvent.get("time") * 1000);
+		long time = (long) ((Double) cloudEvent.get("time") * 1000);
 
-		log.info("received {} {}", cloudEvent,new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss").format(time));
+		log.info("received {} {}", cloudEvent, new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss").format(time));
 	}
 
 }

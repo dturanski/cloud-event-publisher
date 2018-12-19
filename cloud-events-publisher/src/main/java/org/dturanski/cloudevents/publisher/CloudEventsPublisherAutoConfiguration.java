@@ -56,7 +56,7 @@ public class CloudEventsPublisherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public CloudEventPublisher<Object> cloudEventPublisher(CloudEventsClient client,
+	public CloudEventPublisher cloudEventPublisher(CloudEventsClient client,
 		DefaultCloudEventMapper cloudEventMapper) {
 		return new WebClientCloudEventPublisher(client, cloudEventMapper);
 	}

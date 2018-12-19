@@ -26,7 +26,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
  * @author David Turanski
  **/
 @Slf4j
-public class WebClientCloudEventPublisher implements CloudEventPublisher<Object> {
+public class WebClientCloudEventPublisher implements CloudEventPublisher {
 
 	private final DefaultCloudEventMapper cloudEventMapper;
 
