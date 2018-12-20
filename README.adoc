@@ -7,6 +7,7 @@ This repository contains a link:cloud-events-publisher[cloud-events-publisher] c
 This repo includes some examples of https://github.com/knative/eventing-sources[Knative Eventing Sources] based on the https://github.com/knative/docs/tree/master/eventing#containersource[ContainerSource Eventing Source].
 
 * link:cloud-events-sample-source/README.adoc[cloud-events-sample-source]
+* link:knative-eventing-sink/README.adoc[Spring Cloud Data Flow integration POC]
 
 [prerequisites]
 === Prerequisites
