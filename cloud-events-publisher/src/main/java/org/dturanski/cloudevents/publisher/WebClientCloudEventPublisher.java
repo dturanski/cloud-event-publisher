@@ -48,4 +48,8 @@ public class WebClientCloudEventPublisher implements CloudEventPublisher {
 		CloudEvent cloudEvent = cloudEventMapper.apply(data);
 		return client.postCloudEvent(cloudEvent);
 	}
+	@Override
+	public Mono<ClientResponse> postCloudEvent(CloudEvent cloudEvent) {
+		return client.postCloudEvent(cloudEvent);
+	}
 }

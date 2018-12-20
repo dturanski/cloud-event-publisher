@@ -25,7 +25,10 @@ import org.springframework.web.reactive.function.client.ClientResponse;
  * @author David Turanski
  **/
 public interface CloudEventPublisher {
+
 	CloudEvent publish(Object data);
 
 	Mono<ClientResponse> convertAndPost(Object data);
+
+	Mono<ClientResponse> postCloudEvent(CloudEvent cloudEvent);
 }

@@ -11,7 +11,7 @@ NOTE: the link:../README.adoc#prerequisites[prerequisites] for running this samp
 Build and push the docker image to GCR. Provide your GCP project as a property.
 
 ```
-cd ../cloud-events-sample-source
+cd cloud-events-sample-source
 ./mvnw clean package jib:build -Dgcp.project=<your_GCP_project>
 ```
 

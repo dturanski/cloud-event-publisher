@@ -48,7 +48,7 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 		sampleSource().get().subscribe(data -> {
 			CloudEvent cloudEvent = mapper.apply(data);
 			log.info("Posting cloud event {} to {}", cloudEvent, webClientProperties.getTargetUri());
-			cloudEventsPublisher.convertAndPost(cloudEvent)
+			cloudEventsPublisher.postCloudEvent(cloudEvent)
 				.subscribe(
 					response -> log.info("status {}", response.statusCode())
 				);

@@ -17,5 +17,6 @@
 	<modules>
 	 	<module>cloud-events-publisher</module>
 	 	<module>cloud-events-sample-source</module>
+		<module>knative-eventing-sink</module>
 	</modules>
 </project>

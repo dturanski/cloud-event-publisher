@@ -48,15 +48,19 @@ public class DefaultCloudEventMapper<T> implements Function<T, CloudEvent<T>> {
 
 	@Override
 	public CloudEvent apply(T data) {
-		return new CloudEventBuilder<T>()
+		return cloudEventBuilder()
 			.data(data)
+			.build();
+	}
+
+	public CloudEventBuilder<T> cloudEventBuilder() {
+		return new CloudEventBuilder<T>()
 			.contentType(this.contentType.toString())
 			.type(this.type)
 			.source(this.source)
 			.id(UUID.randomUUID().toString())
 			.time(ZonedDateTime.now())
 			.schemaURL(this.schemaUrl)
-			.specVersion(this.specVersion)
-			.build();
+			.specVersion(this.specVersion);
 	}
 }
