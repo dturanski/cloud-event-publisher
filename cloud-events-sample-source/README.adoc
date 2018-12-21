@@ -32,7 +32,7 @@ The source publishes to a channel which the `message dumper` subscribes to.
 The `message dumper` logs the contents of each message it receives.
 
 
-NOTE: The PFS install includes Knative Eventing, and In memory ClusterChannelProvisioner out of the box, so you can skip these steps.
+NOTE: The PFS install includes and older version of Knative Eventing, these samples depend on setting up Knative Eventing as documented.
 
 First, create a Channel:
 
