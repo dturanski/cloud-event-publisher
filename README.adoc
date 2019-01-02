@@ -22,5 +22,7 @@ This repo includes some examples of https://github.com/knative/eventing-sources[
 ```
 cd scdf-knative-interoperability
 ./mvnw clean install
-
 ```
+
+==== To use riff/PFS to create channel and subscription
+* pfs CLI 0.2 or higher or riff CLI 0.3 or higher

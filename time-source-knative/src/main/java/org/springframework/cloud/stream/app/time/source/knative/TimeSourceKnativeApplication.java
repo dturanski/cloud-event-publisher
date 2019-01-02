@@ -48,8 +48,8 @@ public class TimeSourceKnativeApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		source.get().subscribe(m-> {
-			cloudEventPublisher.convertAndPost(m.getPayload());
-		});
+		source.get().subscribe(m->
+			cloudEventPublisher.convertAndPost(m.getPayload())
+			.subscribe(clientResponse -> { }));
 	}
 }

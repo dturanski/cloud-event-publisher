@@ -1,0 +1,17 @@
+= Knative Time Source
+
+This demo packages the Out of the box https://github.com/spring-cloud-stream-app-starters/time[time source] starter along with the `source-supplier-adapter` and the `cloud-event-publisher` to create a Knative Eventing Source.
+
+```
+pfs channel create --cluster-provisioner in-memory-channel time-channel
+```
+
+```
+pfs subscription delete message-dumper
+
+pfs subscription create --channel time-channel --subscriber message-dumper
+```
+
+```
+kubectl apply -f config/knative-time-source.yaml
+```

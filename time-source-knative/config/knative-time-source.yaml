@@ -3,12 +3,12 @@ kind: ContainerSource
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
-  name: cloud-event-source
+  name: time-source
 #
 # Edit the image repository and tag accordingly
 #
 spec:
-  image: gcr.io/<your-GCP-project>/sample-event-source:0.0.1-SNAPSHOT
+  image: gcr.io/<Your_GCP_Project>/time-source:1.0.0.BUILD-SNAPSHOT
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
     kind: Channel
