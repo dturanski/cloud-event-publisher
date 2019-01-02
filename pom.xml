@@ -3,12 +3,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.1.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	
 	<groupId>org.dturanski</groupId>
-	<artifactId>cloud-event-publisher-build</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>scdf-knative-interoperability</artifactId>
+	<version>1.0.0.BUILD-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>cloud-event-publisher-build</name>
-	<description>Build for Cloud Event Publisher</description>
+	<name>scdf-knative-interoperability</name>
+	<description>Spring Cloud Data Flow - Knative Interoperability POC</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -16,7 +23,20 @@
 
 	<modules>
 	 	<module>cloud-events-publisher</module>
-	 	<module>cloud-events-sample-source</module>
-		<module>knative-eventing-sink</module>
+		<module>source-supplier-adapter</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

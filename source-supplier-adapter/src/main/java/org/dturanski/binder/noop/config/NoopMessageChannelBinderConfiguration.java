@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package org.dturanski.cloudevents.publisher;
+package org.dturanski.binder.noop.config;
 
-import lombok.Data;
+import org.dturanski.binder.noop.binder.NoopMessageChannelBinder;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author David Turanski
  **/
-@ConfigurationProperties(prefix = "cloudevents.publisher")
-@Data
-public class WebClientProperties {
+@Configuration
+public class NoopMessageChannelBinderConfiguration {
 
-	private String targetUri;
-
-	private int timeoutMs;
+	@Bean
+	public NoopMessageChannelBinder noopMessageChannelBinder() {
+		return new NoopMessageChannelBinder();
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,11 @@ import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * @author David Turanski
@@ -28,28 +32,47 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 @Slf4j
 public class WebClientCloudEventPublisher implements CloudEventPublisher {
 
-	private final DefaultCloudEventMapper cloudEventMapper;
+	public final static String CLOUD_EVENT_CONTENT_TYPE = "application/cloudevents+json";
 
-	private final CloudEventsClient client;
+	private final DefaultCloudEventMapper mapper;
 
-	public WebClientCloudEventPublisher(CloudEventsClient client, DefaultCloudEventMapper mapper) {
+	private final WebClient client;
+
+	public WebClientCloudEventPublisher(WebClient client, DefaultCloudEventMapper mapper) {
 		this.client = client;
-		this.cloudEventMapper = mapper;
+		this.mapper = mapper;
 	}
 
 	@Override
 	public CloudEvent publish(Object data) {
-		CloudEvent cloudEvent = cloudEventMapper.apply(data);
-		client.postCloudEvent(cloudEvent).block();
+		CloudEvent cloudEvent = mapper.apply(data);
+		postCloudEvent(cloudEvent).block();
 		return cloudEvent;
 	}
 
 	public Mono<ClientResponse> convertAndPost(Object data) {
-		CloudEvent cloudEvent = cloudEventMapper.apply(data);
-		return client.postCloudEvent(cloudEvent);
+		return postCloudEvent(mapper.apply(data));
 	}
-	@Override
+
 	public Mono<ClientResponse> postCloudEvent(CloudEvent cloudEvent) {
-		return client.postCloudEvent(cloudEvent);
+		return postAndHandleResponse(cloudEvent,
+			MediaType.parseMediaType(CLOUD_EVENT_CONTENT_TYPE));
+	}
+
+	private Mono<ClientResponse> postAndHandleResponse(Object data, MediaType contentType) {
+		return client.post()
+			.contentType(contentType)
+			.syncBody(data)
+			.exchange().doOnNext(response -> {
+				HttpStatus httpStatus = response.statusCode();
+				if (httpStatus.is4xxClientError() || httpStatus.is5xxServerError()) {
+					throw WebClientResponseException.create(
+						httpStatus.value(),
+						httpStatus.getReasonPhrase(),
+						response.headers().asHttpHeaders(),
+						null,
+						null);
+				}
+			});
 	}
 }

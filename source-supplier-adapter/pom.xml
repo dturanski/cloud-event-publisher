@@ -18,56 +18,55 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>org.dturanski</groupId>
+		<artifactId>scdf-knative-interoperability</artifactId>
+		<version>1.0.0.BUILD-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
+
 	<groupId>org.dturanski</groupId>
-	<artifactId>cloud-events-sample-source</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>cloud-events-sample-source</name>
-	<description>Demo project for generating Cloud Events</description>
+	<artifactId>source-supplier-adapter</artifactId>
+	<name>source-supplier-adapter</name>
+	<description>Wraps Spring Cloud Stream Source with Supplier Function</description>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<docker.version>${project.version}</docker.version>
+		<spring-cloud.version>Greenwich.RC2</spring-cloud.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.dturanski</groupId>
-			<artifactId>cloud-events-publisher</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+			<version>2.1.0.BUILD-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>0.10.1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
-					<from>
-						<image>springcloud/openjdk</image>
-					</from>
-					<to>
-						<image>gcr.io/${gcp.project}/sample-event-source:${docker.version}</image>
-					</to>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
@@ -76,11 +75,13 @@
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
+		</repository>
+
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
 		</repository>
 	</repositories>
-
 
 </project>

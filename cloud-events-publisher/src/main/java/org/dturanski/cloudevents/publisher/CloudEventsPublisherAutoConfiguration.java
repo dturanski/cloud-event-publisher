@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class CloudEventsPublisherAutoConfiguration {
 
 	@Bean
-	@ConditionalOnMissingBean
-	public CloudEventsClient cloudEventsClient(WebClient webClient, DefaultCloudEventMapper mapper) {
-		CloudEventsClient cloudEventsClient = new CloudEventsClient(webClient, mapper);
-		return cloudEventsClient;
-	}
-
-	@Bean
 	public WebClient webClient(WebClientProperties properties) {
 		HttpClient httpClient = HttpClient.create()
 			.tcpConfiguration(client ->
@@ -56,7 +49,7 @@ public class CloudEventsPublisherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public CloudEventPublisher cloudEventPublisher(CloudEventsClient client,
+	public WebClientCloudEventPublisher cloudEventPublisher(WebClient client,
 		DefaultCloudEventMapper cloudEventMapper) {
 		return new WebClientCloudEventPublisher(client, cloudEventMapper);
 	}

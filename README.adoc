@@ -1,13 +1,15 @@
-= Cloud Events Publisher
+= SCDF Knative Interoperability
 
-This repository contains a link:cloud-events-publisher[cloud-events-publisher] core library along with some samples for integrating with https://github.com/knative/docs/blob/master/eventing/README.md[Knative Eventing]
+This repository contains
+* link:source-supplier-adapter[source-supplier-adapter] core library to adapt a Spring Cloud Stream `Source` component to a `Supplier<Flux<Message<?>>>`
+* link:cloud-events-publisher[cloud-events-publisher] core library along with some samples for integrating with https://github.com/knative/docs/blob/master/eventing/README.md[Knative Eventing]
 
 == Sample Knative Eventing Sources
 
 This repo includes some examples of https://github.com/knative/eventing-sources[Knative Eventing Sources] based on the https://github.com/knative/docs/tree/master/eventing#containersource[ContainerSource Eventing Source].
 
 * link:cloud-events-sample-source/README.adoc[cloud-events-sample-source]
-* link:knative-eventing-sink/README.adoc[Spring Cloud Data Flow integration POC]
+* link:time-source-knative/README.adoc[Spring Cloud Stream Interoperability POC]
 
 [prerequisites]
 === Prerequisites
@@ -15,10 +17,10 @@ This repo includes some examples of https://github.com/knative/eventing-sources[
 * These instructions pertain to for https://docs.pivotal.io/pfs/index.html[PFS] https://docs.pivotal.io/pfs/install-on-pks.html[installed on PKS] running on Google Cloud Platform (GCP)
 * Docker CLI with GCR credentials configured
 
-* Install the `cloud-events-publisher` library in your local Maven repo.
+* Install the core libraries in your local Maven repo.
 
 ```
-cd cloud-events-publisher
+cd scdf-knative-interoperability
 ./mvnw clean install
 
 ```

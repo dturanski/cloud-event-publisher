@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,16 @@ package org.dturanski.cloudevents.publisher;
 import java.net.URI;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import io.cloudevents.CloudEventBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import reactor.core.publisher.Mono;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -52,7 +48,7 @@ public class CloudEventsClientTests {
 
 	private WebClientCloudEventPublisher cloudEventPublisher;
 
-	private CloudEventsClient cloudEventsClient;
+	private WebClient webClient;
 
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort().dynamicHttpsPort());
@@ -64,14 +60,13 @@ public class CloudEventsClientTests {
 	public void setUp() {
 
 		DefaultCloudEventMapper cloudEventMapper = new DefaultCloudEventMapper();
-		cloudEventsClient = new CloudEventsClient(
+		webClient =
 			WebClient.builder().baseUrl(String.format("http://localhost:%d/events", wireMockRule.port()))
-			.build(),
-			cloudEventMapper);
+			.build();
 		cloudEventMapper.setContentType(MediaType.APPLICATION_JSON);
 		cloudEventMapper.setSource(URI.create("/test"));
 		cloudEventMapper.setType("test.event.type");
-		cloudEventPublisher = new WebClientCloudEventPublisher(cloudEventsClient, cloudEventMapper);
+		cloudEventPublisher = new WebClientCloudEventPublisher(webClient, cloudEventMapper);
 
 	}
 
@@ -79,16 +74,16 @@ public class CloudEventsClientTests {
 	public void postCloudEvent() {
 
 		stubFor(post(urlEqualTo("/events"))
-			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(CloudEventsClient.CLOUD_EVENT_CONTENT_TYPE))
+			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(WebClientCloudEventPublisher.CLOUD_EVENT_CONTENT_TYPE))
 			.willReturn(aResponse()
 				.withStatus(200)));
 
-		 ClientResponse response = cloudEventsClient.convertAndPost(new MyCustomEvent("bar")).block();
+		 ClientResponse response = cloudEventPublisher.convertAndPost(new MyCustomEvent("bar")).block();
 
 		 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK);
 
 		verify(postRequestedFor(urlEqualTo("/events"))
-			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(CloudEventsClient.CLOUD_EVENT_CONTENT_TYPE))
+			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(WebClientCloudEventPublisher.CLOUD_EVENT_CONTENT_TYPE))
 			.withRequestBody(matchingJsonPath("$.type", equalTo("test.event.type")))
 			.withRequestBody(matchingJsonPath("$.source", equalTo("/test")))
 			.withRequestBody(matchingJsonPath("$.contentType", equalTo("application/json")))
@@ -99,7 +94,7 @@ public class CloudEventsClientTests {
 	@Test
 	public void handlesServerError() {
 		stubFor(post(urlEqualTo("/events"))
-			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(CloudEventsClient.CLOUD_EVENT_CONTENT_TYPE))
+			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(WebClientCloudEventPublisher.CLOUD_EVENT_CONTENT_TYPE))
 			.willReturn(aResponse()
 				.withStatus(500)));
 
@@ -112,7 +107,7 @@ public class CloudEventsClientTests {
 	@Test
 	public void handlesNotFoundError() {
 		stubFor(post(urlEqualTo("/events"))
-			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(CloudEventsClient.CLOUD_EVENT_CONTENT_TYPE))
+			.withHeader(HttpHeaders.CONTENT_TYPE, equalTo(WebClientCloudEventPublisher.CLOUD_EVENT_CONTENT_TYPE))
 			.willReturn(aResponse()
 				.withStatus(404)));
 
