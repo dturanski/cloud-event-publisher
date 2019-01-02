@@ -1,7 +1,7 @@
 apiVersion: eventing.knative.dev/v1alpha1
 kind: Channel
 metadata:
-  name: qux-1
+  name: time-channel
   namespace: default
 spec:
   provisioner:

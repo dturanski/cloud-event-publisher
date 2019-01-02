@@ -26,7 +26,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>org.dturanski</groupId>
 	<artifactId>source-supplier-adapter</artifactId>
 	<name>source-supplier-adapter</name>
 	<description>Wraps Spring Cloud Stream Source with Supplier Function</description>

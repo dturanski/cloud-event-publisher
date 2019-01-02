@@ -24,6 +24,7 @@
 	<modules>
 	 	<module>cloud-events-publisher</module>
 		<module>source-supplier-adapter</module>
+		<module>log-function</module>
 	</modules>
 
 	<build>
