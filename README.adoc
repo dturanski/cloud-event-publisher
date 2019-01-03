@@ -30,6 +30,6 @@ Binaries of current versions have restricted access, but you can https://github.
 
 * pfs CLI 0.2 or higher or riff CLI 0.3 or higher
 
-Alternatively, use `kubectl apply` with the provided config. You can use `pfs create function` with either version.
+Alternatively, use `kubectl apply` with the provided config. You can use `pfs function create` with either version.
 
 
