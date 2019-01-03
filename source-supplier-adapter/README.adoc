@@ -9,7 +9,7 @@ This provides auto configuration for:
 
 Including this as a dependency along with the app starter exposes the Supplier.
 
-An example of this is link:../time-source-knative/README.adoc[time-source-knative]
+An example of this is link:../time-source-knative/README[time-source-knative]
 
 
 
