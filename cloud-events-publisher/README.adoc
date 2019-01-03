@@ -1,6 +1,6 @@
 = Cloud Events Publisher
 
-This library provides auto configuration for a `CloudEventsPublisher` component, which publishes https://cloudevents.io/[Cloud Events] via http using `spring-webflux`.
+This library provides auto configuration for a `CloudEventsPublisher` component, which publishes https://cloudevents.io/[Cloud Events] via HTTP using `spring-webflux`.
 
 The `cloud-events-publisher` is configured by the following properties:
 
