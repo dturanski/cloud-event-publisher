@@ -1,28 +1,19 @@
-= SCDF Knative Interoperablity
+= Source Supplier Adapter
 
-This repository contains
- * link:source-supplier-adapter[source-supplier-adapter] core library to adapt a Spring Cloud Stream Source component as a `Supplier<Flux<Message<?>>`
- * link:cloud-events-publisher[cloud-events-publisher] core library along with some samples for integrating with https://github.com/knative/docs/blob/master/eventing/README.md[Knative Eventing]
+Core library to adapt a Spring Cloud Stream Source component as a `Supplier<Flux<Message<?>>`
 
-== Sample Knative Eventing Sources
+This provides auto configuration for:
 
-This repo includes some examples of https://github.com/knative/eventing-sources[Knative Eventing Sources] based on the https://github.com/knative/docs/tree/master/eventing#containersource[ContainerSource Eventing Source].
+* A Stub Binder that satisfies configuration added by `@EnableBinding` which is included in the OOTB Spring Cloud Stream App starters
+* The Supplier function backed by a `@ServiceActivator` on `Source.OUTPUT`
 
-* link:cloud-events-sample-source/README.adoc[cloud-events-sample-source]
-* link:knative-time-source/README.adoc[Spring Cloud Data Flow integration POC]
+Including this as a dependency along with the app starter exposes the Supplier.
 
-[prerequisites]
-=== Prerequisites
+An example of this is link:../time-source-knative/README.adoc[time-source-knative]
 
-* These instructions pertain to for https://docs.pivotal.io/pfs/index.html[PFS] https://docs.pivotal.io/pfs/install-on-pks.html[installed on PKS] running on Google Cloud Platform (GCP)
-* Docker CLI with GCR credentials configured
 
-* Install the `source-supplier-adapter` library in your local Maven repo.
-* Install the `cloud-events-publisher` library in your local Maven repo.
 
-```
-cd source-supplier-adapter
-./mvnw clean install
-cd ../cloud-events-publisher
-./mvnw clean install
-```
+
+
+
+

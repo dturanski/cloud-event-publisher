@@ -1,6 +1,6 @@
 = Cloud Events Publisher
 
-This library provides Spring Boot auto configuration for a `CloudEventsPublisher` component, which publishes https://cloudevents.io/[Cloud Events] via http.
+This library provides auto configuration for a `CloudEventsPublisher` component, which publishes https://cloudevents.io/[Cloud Events] via http using `spring-webflux`.
 
 The `cloud-events-publisher` is configured by the following properties:
 
@@ -9,4 +9,6 @@ The `cloud-events-publisher` is configured by the following properties:
 * *io.cloudevents.event.type* - A String identifier
 * *io.cloudevents.event.source* - A URI identifier
 * *io.cloudevents.event.content-type* - The content-type of the event data
+
+An example of this is link:../time-source-knative/README.adoc[time-source-knative]
 
