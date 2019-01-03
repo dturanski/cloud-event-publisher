@@ -2,6 +2,8 @@
 
 This demo application packages the Out of the box https://github.com/spring-cloud-stream-app-starters/time[time source] starter along with the `source-supplier-adapter` and the `cloud-event-publisher` to create a Knative Eventing Source.
 
+NOTE: Producing messages as Cloud Events isn't required, but is an adopted Knative standard, and can provide useful context and metadata events.
+
 == Create a function to receive the source data.
 
 The source emits a byte[] payload with `Content-type:text/plain`, somewhere the Knative stack encodes this as a Base 64 String.
@@ -38,13 +40,71 @@ kubectl apply -f config/subscriber-log.yaml
 
 ```
 
+== Build and publish the event source
+
+```
+./mvnw clean package jib:build -Dgcp.project=$GCP_PROJECT
+```
+
 == Create the eventing source
 
 NOTE: Currently PFS/riff CLIs do not support eventing sources
+
+Edit `config/knative-time-source.yaml` to provide your GCP project name where indicated.
 
 ```
 kubectl apply -f config/knative-time-source.yaml
 ```
 
-The source posts the time, wrapped in a Cloud Event, to the `time-channel`. The subscriber receives the messages.
+The source posts the time every second, wrapped in a Cloud Event, to the `time-channel`. The subscriber receives the messages.
 
+== Check the output
+
+```
+kubectl get pods
+
+NAME                                   READY   STATUS      RESTARTS   AGE
+...
+log-00001-deployment-dfc888c9d-h7smc   3/3     Running     0          1m
+
+kubectl logs -f log-00001-deployment-dfc888c9d-h7smc user-container
+```
+
+You should see log entries like:
+
+```
+Received: 01/03/19 16:51:30
+Received: 01/03/19 16:51:31
+Received: 01/03/19 16:51:32
+Received: 01/03/19 16:51:33
+Received: 01/03/19 16:51:34
+Received: 01/03/19 16:51:35
+Received: 01/03/19 16:51:36
+Received: 01/03/19 16:51:37
+Received: 01/03/19 16:51:38
+Received: 01/03/19 16:51:39
+Received: 01/03/19 16:51:40
+Received: 01/03/19 16:51:41
+Received: 01/03/19 16:51:42
+Received: 01/03/19 16:51:43
+Received: 01/03/19 16:51:44
+Received: 01/03/19 16:51:45
+Received: 01/03/19 16:51:46
+Received: 01/03/19 16:51:47
+Received: 01/03/19 16:51:48
+Received: 01/03/19 16:51:49
+Received: 01/03/19 16:51:50
+Received: 01/03/19 16:51:51
+```
+== Clean up
+
+```
+kubectl delete containersources.sources.eventing.knative.dev/time-source
+```
+or
+
+```
+kubectl delete -f config/knative-time-source.yaml
+```
+
+After a few minutes of no traffic,  the `log` pod will terminate
