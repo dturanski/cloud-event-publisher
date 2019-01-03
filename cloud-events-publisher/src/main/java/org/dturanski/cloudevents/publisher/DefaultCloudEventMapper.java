@@ -59,7 +59,9 @@ public class DefaultCloudEventMapper<T> implements Function<T, CloudEvent<T>> {
 			.type(this.type)
 			.source(this.source)
 			.id(UUID.randomUUID().toString())
-			.time(ZonedDateTime.now())
+
+			//TODO: Iteroperability issues with GSon
+			// .time(ZonedDateTime.now())
 			.schemaURL(this.schemaUrl)
 			.specVersion(this.specVersion);
 	}
