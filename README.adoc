@@ -10,7 +10,7 @@ This repository contains the following core libraries along with some samples fo
 This repo includes some examples of https://github.com/knative/eventing-sources[Knative Eventing Sources] based on the https://github.com/knative/docs/tree/master/eventing#containersource[ContainerSource Eventing Source].
 
 * link:cloud-events-sample-source/README.adoc[cloud-events-sample-source]
-* link:time-source-knative/README.adoc[Spring Cloud Stream interoperability]
+* link:time-source-knative/README.adoc[time-source-knative]
 
 [prerequisites]
 == Prerequisites
