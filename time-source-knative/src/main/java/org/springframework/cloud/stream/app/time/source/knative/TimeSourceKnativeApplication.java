@@ -19,7 +19,6 @@ package org.springframework.cloud.stream.app.time.source.knative;
 import java.util.function.Supplier;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
 import reactor.core.publisher.Flux;
 
@@ -42,14 +41,13 @@ public class TimeSourceKnativeApplication implements CommandLineRunner {
 	@Autowired
 	private WebClientCloudEventPublisher cloudEventPublisher;
 
-
 	@Autowired
 	private Supplier<Flux<Message<?>>> source;
 
 	@Override
 	public void run(String... args) {
-		source.get().subscribe(m->
+		source.get().subscribe(m ->
 			cloudEventPublisher.convertAndPost(m.getPayload())
-			.subscribe(clientResponse -> { }));
+				.subscribe(clientResponse -> { }));
 	}
 }

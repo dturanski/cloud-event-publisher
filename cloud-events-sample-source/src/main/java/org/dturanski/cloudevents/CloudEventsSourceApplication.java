@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 
 import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.cloudevents.publisher.DefaultCloudEventMapper;
 import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
 import org.dturanski.cloudevents.publisher.WebClientProperties;
