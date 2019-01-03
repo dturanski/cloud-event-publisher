@@ -1,17 +1,50 @@
 = Knative Time Source
 
-This demo packages the Out of the box https://github.com/spring-cloud-stream-app-starters/time[time source] starter along with the `source-supplier-adapter` and the `cloud-event-publisher` to create a Knative Eventing Source.
+This demo application packages the Out of the box https://github.com/spring-cloud-stream-app-starters/time[time source] starter along with the `source-supplier-adapter` and the `cloud-event-publisher` to create a Knative Eventing Source.
+
+== Create a function to receive the source data.
+
+The source emits a byte[] payload with `Content-type:text/plain`, somewhere the Knative stack encodes this as a Base 64 String.
+The subscriber is a simple Spring Boot application that receives a CloudEvent and decodes the Base 64 String.
+
+
+```
+pfs function create log --git-repo https://github.com/dturanski/log-function.git --image gcr.io/$GCP_PROJECT/log --verbose
+```
+
+To invoke it standalone:
+
+```
+pfs service invoke log  --json -- --data '{"data":"MDEvMDMvMTkgMTU6MDk6NTg="}'
+```
+
+== Create the Channel and Subscription
+
+NOTE: The `riff` and `pfs` CLIs are interchangeable. This requires either pfs CLI 0.2 or higher or riff CLI 0.3 or higher
+Earlier versions work with an eventing model that has since been changed.
+We will use `pfs` here.
 
 ```
 pfs channel create --cluster-provisioner in-memory-channel time-channel
+
+pfs subscription create --channel time-channel --subscriber log
 ```
 
-```
-pfs subscription delete message-dumper
+Alternatively, use the provided yaml:
 
-pfs subscription create --channel time-channel --subscriber message-dumper
 ```
+kubectl apply -f config/channel-time-channel.yaml
+kubectl apply -f config/subscriber-log.yaml
+
+```
+
+== Create the eventing source
+
+NOTE: Currently PFS/riff CLIs do not support eventing sources
 
 ```
 kubectl apply -f config/knative-time-source.yaml
 ```
+
+The source posts the time, wrapped in a Cloud Event, to the `time-channel`. The subscriber receives the messages.
+

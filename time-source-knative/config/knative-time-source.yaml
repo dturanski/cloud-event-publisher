@@ -8,7 +8,7 @@ metadata:
 # Edit the image repository and tag accordingly
 #
 spec:
-  image: gcr.io/triple-rookery-118122/time-source:0.3
+  image: gcr.io/<Your-GCP-Project>/time-source:1.0.0.BUILD-SNAPSHOT
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
     kind: Channel

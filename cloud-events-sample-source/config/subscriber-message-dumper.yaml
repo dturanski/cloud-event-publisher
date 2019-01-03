@@ -1,4 +1,4 @@
-# Subscription from the GcpPubSubSource's output Channel to the Knative Service below.
+# Subscription from the event source to the Knative Service below.
 
 apiVersion: eventing.knative.dev/v1alpha1
 kind: Subscription
