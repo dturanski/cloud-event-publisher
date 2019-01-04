@@ -1,0 +1,100 @@
+= Knative Twitter Search Source
+
+This demo application packages an existing https://github.com/tzolov/twitter2/tree/master/spring-cloud-starter-stream-source-twitter-search[twitter search source] starter along with the `source-supplier-adapter` and the `cloud-event-publisher` to create a Knative Eventing Source.
+
+NOTE: This requires pulling Twitter search source, above, and building it locally
+
+NOTE: Producing messages as Cloud Events isn't required, but is an adopted Knative standard, and can provide useful context and metadata events.
+
+== Create a function to receive the source data.
+
+The original source emits a byte[] payload as `application/json`. This application extracts the `text` field as `text/plain`.
+
+```
+pfs function create log --git-repo https://github.com/dturanski/log-function.git --image gcr.io/$GCP_PROJECT/log --verbose
+```
+
+To invoke it standalone:
+
+```
+pfs service invoke log  --json -- --data '{"data":"hello"}'
+```
+
+== Create the Channel and Subscription
+
+NOTE: The `riff` and `pfs` CLIs are interchangeable. This requires either pfs CLI 0.2 or higher or riff CLI 0.3 or higher
+Earlier versions work with an eventing model that has since been changed.
+We will use `pfs` here.
+
+```
+pfs subscriber delete log
+
+pfs channel create --cluster-provisioner in-memory-channel tweets
+
+pfs subscription create --channel tweets --subscriber log
+```
+
+Alternatively, use the provided yaml:
+
+```
+kubectl apply -f config/tweets-channel.yaml
+kubectl apply -f config/subscriber-log.yaml
+
+```
+
+== Build and publish the event source
+
+```
+./mvnw clean package jib:build -Dgcp.project=$GCP_PROJECT
+```
+== Configure Istio to allow traffic from `api.twitter.com`
+
+```
+kubectl apply -f config/twitter-service-entry.yaml
+```
+
+== Create the eventing source
+
+NOTE: Currently PFS/riff CLIs do not support eventing sources
+
+Edit `config/twitter-search-source.yaml` to provide your GCP project name where indicated.
+
+```
+kubectl apply -f config/twitter-search-source.yaml
+```
+
+The source posts tweet text, wrapped in a Cloud Event, to the `tweets` channel. The subscriber receives the messages.
+
+== Check the output
+
+```
+kubectl get pods
+
+NAME                                   READY   STATUS      RESTARTS   AGE
+...
+log-00001-deployment-dfc888c9d-h7smc   3/3     Running     0          1m
+
+kubectl logs -f log-00001-deployment-dfc888c9d-h7smc user-container
+```
+
+You should see log entries like:
+
+```
+Received: RT @realDonaldTrump: As I have stated many times, if the Democrats take over the House or Senate, there will be disruption to the Financial?
+Received: @realDonaldTrump #ImpeachTrump  https://t.co/nhmjS9iD6f
+Received: RT @_SemaHernandez_: I agree with @JohnCornyn, we must end #TrumpShutdown.
+However the person responsible for the shutdown to "score politi?
+Received: @StofCircumstanc @hughhewitt @SpeakerPelosi @realDonaldTrump Locker room talk.
+```
+== Clean up
+
+```
+kubectl delete containersources.sources.eventing.knative.dev/twitter-search-source
+```
+or
+
+```
+kubectl delete -f config/twitter-search-source.yaml
+```
+
+After a few minutes of no traffic,  the `log` pod will terminate

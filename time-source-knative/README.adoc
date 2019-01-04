@@ -6,8 +6,7 @@ NOTE: Producing messages as Cloud Events isn't required, but is an adopted Knati
 
 == Create a function to receive the source data.
 
-The source emits a byte[] payload with `Content-type:text/plain`, somewhere the Knative stack encodes this as a Base 64 String.
-The subscriber is a simple Spring Boot application that receives a CloudEvent and decodes the Base 64 String.
+The subscriber is a simple Spring Boot application that receives a CloudEvent and prints the data as a String.
 
 
 ```
@@ -17,7 +16,7 @@ pfs function create log --git-repo https://github.com/dturanski/log-function.git
 To invoke it standalone:
 
 ```
-pfs service invoke log  --json -- --data '{"data":"MDEvMDMvMTkgMTU6MDk6NTg="}'
+pfs service invoke log  --json -- --data '{"data":"01/03/19 16:51:30"}'
 ```
 
 == Create the Channel and Subscription

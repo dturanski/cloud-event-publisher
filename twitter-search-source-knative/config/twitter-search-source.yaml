@@ -1,0 +1,15 @@
+apiVersion: sources.eventing.knative.dev/v1alpha1
+kind: ContainerSource
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: twitter-search-source
+#
+# Edit the image repository and tag accordingly
+#
+spec:
+  image: gcr.io/<Your-GCP-Project>/twitter-search-source:1.0.0.BUILD-SNAPSHOT
+  sink:
+    apiVersion: eventing.knative.dev/v1alpha1
+    kind: Channel
+    name: tweets

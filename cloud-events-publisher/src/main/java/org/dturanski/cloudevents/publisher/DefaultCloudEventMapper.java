@@ -17,7 +17,6 @@
 package org.dturanski.cloudevents.publisher;
 
 import java.net.URI;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 import java.util.function.Function;
 

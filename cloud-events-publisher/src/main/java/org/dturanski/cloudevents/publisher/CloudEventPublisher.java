@@ -16,6 +16,8 @@
 
 package org.dturanski.cloudevents.publisher;
 
+import java.util.function.Consumer;
+
 import io.cloudevents.CloudEvent;
 
 /**
@@ -24,4 +26,7 @@ import io.cloudevents.CloudEvent;
 public interface CloudEventPublisher {
 
 	CloudEvent publish(Object data);
+
+	CloudEvent publish(Object data, Consumer consumer);
+
 }

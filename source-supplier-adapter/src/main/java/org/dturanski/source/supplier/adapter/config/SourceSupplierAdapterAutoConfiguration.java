@@ -16,14 +16,19 @@
 
 package org.dturanski.source.supplier.adapter.config;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 
@@ -31,7 +36,7 @@ import org.springframework.messaging.Message;
  * @author David Turanski
  **/
 @Configuration
-public class SourceSupplierAdapterAutoConfiguration {
+public class SourceSupplierAdapterAutoConfiguration implements EnvironmentPostProcessor {
 	private EmitterProcessor<Message<?>> emitterProcessor = EmitterProcessor.create();
 
 	@Bean
@@ -44,4 +49,9 @@ public class SourceSupplierAdapterAutoConfiguration {
 		emitterProcessor.onNext(message);
 	}
 
+	@Override
+	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+		environment.getPropertySources().addLast(new MapPropertySource("binder-settings",
+			Collections.singletonMap("spring.cloud.stream.bindings.output.producer.use-native-encoding",true)));
+	}
 }

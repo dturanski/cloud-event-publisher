@@ -19,35 +19,28 @@ package org.springframework.cloud.stream.app.time.source.knative;
 import java.util.function.Supplier;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
+import org.dturanski.cloudevents.publisher.CloudEventPublisher;
+import org.dturanski.source.supplier.cloudevents.CloudEventsPublisherCommandLineRunner;
 import reactor.core.publisher.Flux;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
 
 @SpringBootApplication
 @Slf4j
 @Import({ org.springframework.cloud.stream.app.time.source.TimeSourceConfiguration.class })
-public class TimeSourceKnativeApplication implements CommandLineRunner {
+public class TimeSourceKnativeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TimeSourceKnativeApplication.class, args);
 	}
 
-	@Autowired
-	private WebClientCloudEventPublisher cloudEventPublisher;
-
-	@Autowired
-	private Supplier<Flux<Message<?>>> source;
-
-	@Override
-	public void run(String... args) {
-		source.get().subscribe(m ->
-			cloudEventPublisher.convertAndPost(m.getPayload())
-				.subscribe(clientResponse -> { }));
+	@Bean
+	CloudEventsPublisherCommandLineRunner cloudEventsPublisherCommandLineRunner(CloudEventPublisher publisher,
+		Supplier<Flux<Message<?>>> source) {
+		return new CloudEventsPublisherCommandLineRunner(publisher, source, o -> {});
 	}
 }

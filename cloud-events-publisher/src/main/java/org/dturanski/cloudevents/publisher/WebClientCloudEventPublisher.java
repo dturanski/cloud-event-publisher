@@ -16,6 +16,8 @@
 
 package org.dturanski.cloudevents.publisher;
 
+import java.util.function.Consumer;
+
 import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -49,6 +51,12 @@ public class WebClientCloudEventPublisher implements CloudEventPublisher {
 		postCloudEvent(cloudEvent).block();
 		return cloudEvent;
 	}
+	@Override
+	public CloudEvent publish(Object data, Consumer consumer) {
+		CloudEvent cloudEvent = mapper.apply(data);
+		postCloudEvent(cloudEvent).subscribe(consumer::accept);
+		return cloudEvent;
+	}
 
 	public Mono<ClientResponse> convertAndPost(Object data) {
 		return postCloudEvent(mapper.apply(data));
@@ -60,6 +68,7 @@ public class WebClientCloudEventPublisher implements CloudEventPublisher {
 	}
 
 	private Mono<ClientResponse> postAndHandleResponse(Object data, MediaType contentType) {
+		log.debug("Posting {}", data);
 		return client.post()
 			.contentType(contentType)
 			.syncBody(data)

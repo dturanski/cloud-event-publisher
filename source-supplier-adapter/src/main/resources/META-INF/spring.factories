@@ -1,2 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   org.dturanski.source.supplier.adapter.config.SourceSupplierAdapterAutoConfiguration
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  org.dturanski.source.supplier.adapter.config.SourceSupplierAdapterAutoConfiguration
+
