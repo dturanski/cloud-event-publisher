@@ -47,7 +47,7 @@ public class TwitterSearchSourceApplication {
 	}
 
 	@Bean
-	CommandLineRunner cloudEventsPublisherCommandLineRunner(CloudEventPublisher publisher,
+	public CommandLineRunner cloudEventsPublisherCommandLineRunner(CloudEventPublisher publisher,
 		Supplier<Flux<Message<?>>> source, ObjectMapper objectMapper) {
 		return args -> {
 			source.get().map(message -> {
@@ -59,7 +59,8 @@ public class TwitterSearchSourceApplication {
 				catch (IOException e) {
 				}
 				return data;
-			}).subscribe(data -> publisher.publish(data, o -> {}));
+			}).subscribe(data -> publisher.convertAndPost(data)
+				.subscribe());
 		};
 	}
 

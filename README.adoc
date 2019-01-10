@@ -3,7 +3,7 @@
 This repository contains the following core libraries along with some samples for integrating with https://github.com/knative/docs/blob/master/eventing/README.md[Knative Eventing]
 
 * link:source-supplier-adapter[source-supplier-adapter] a library to adapt a Spring Cloud Stream `Source` component to a `Supplier<Flux<Message<?>>>`
-* link:cloud-events-publisher[cloud-events-publisher] a library to publish Cloud Events via HTTP.
+* link:cloud-event-publisher[cloud-event-publisher] a library to publish Cloud Events via HTTP.
 
 == Sample Knative Eventing Sources
 

@@ -33,7 +33,7 @@ import org.springframework.http.MediaType;
  **/
 @Data
 @ConfigurationProperties(prefix = "io.cloudevents.event")
-public class DefaultCloudEventMapper<T> implements Function<T, CloudEvent<T>> {
+public class CloudEventMapper<T> implements Function<T, CloudEvent<T>> {
 
 	private MediaType contentType = MediaType.TEXT_PLAIN;
 

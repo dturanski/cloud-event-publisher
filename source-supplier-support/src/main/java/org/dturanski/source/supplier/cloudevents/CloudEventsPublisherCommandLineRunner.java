@@ -19,7 +19,6 @@ package org.dturanski.source.supplier.cloudevents;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import reactor.core.publisher.Flux;
@@ -47,14 +46,21 @@ public class CloudEventsPublisherCommandLineRunner implements CommandLineRunner 
 		this.consumer = consumer;
 	}
 
+	public CloudEventsPublisherCommandLineRunner(CloudEventPublisher cloudEventPublisher,
+		Supplier<Flux<Message<?>>> source) {
+
+		this.cloudEventPublisher = cloudEventPublisher;
+		this.source = source;
+		this.consumer = o -> {};
+	}
+
 	@Override
 	public void run(String... args) {
 
 		source.get().subscribe(m -> {
 			log.trace("publishing {}", m.getPayload());
-			CloudEvent cloudEvent = cloudEventPublisher.publish(m.getPayload(), consumer);
-			log.trace("published {}", cloudEvent);
-
+			cloudEventPublisher.convertAndPost(m.getPayload()).subscribe(
+				consumer::accept);
 		});
 	}
 

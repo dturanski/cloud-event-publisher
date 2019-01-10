@@ -23,6 +23,7 @@ import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.source.supplier.cloudevents.CloudEventsPublisherCommandLineRunner;
 import reactor.core.publisher.Flux;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -39,8 +40,8 @@ public class TimeSourceKnativeApplication {
 	}
 
 	@Bean
-	CloudEventsPublisherCommandLineRunner cloudEventsPublisherCommandLineRunner(CloudEventPublisher publisher,
+	public CommandLineRunner cloudEventsPublisherCommandLineRunner(CloudEventPublisher publisher,
 		Supplier<Flux<Message<?>>> source) {
-		return new CloudEventsPublisherCommandLineRunner(publisher, source, o -> {});
+		return new CloudEventsPublisherCommandLineRunner(publisher, source);
 	}
 }

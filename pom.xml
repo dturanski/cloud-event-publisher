@@ -22,7 +22,7 @@
 	</properties>
 
 	<modules>
-	 	<module>cloud-events-publisher</module>
+	 	<module>cloud-event-publisher</module>
 		<module>source-supplier-adapter</module>
 		<module>source-supplier-support</module>
 	</modules>

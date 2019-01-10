@@ -26,9 +26,9 @@
 	</parent>
 
 	<groupId>org.dturanski</groupId>
-	<artifactId>cloud-events-publisher</artifactId>
+	<artifactId>cloud-event-publisher</artifactId>
 	<packaging>jar</packaging>
-	<name>cloud-events-publisher</name>
+	<name>cloud-event-publisher</name>
 	<description>Library for publishing Cloud Events</description>
 
 	<properties>

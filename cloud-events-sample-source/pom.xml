@@ -38,7 +38,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.dturanski</groupId>
-			<artifactId>cloud-events-publisher</artifactId>
+			<artifactId>cloud-event-publisher</artifactId>
 			<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 		<dependency>

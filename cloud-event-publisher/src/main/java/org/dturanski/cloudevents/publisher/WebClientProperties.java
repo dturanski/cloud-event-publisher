@@ -16,17 +16,18 @@
 
 package org.dturanski.cloudevents.publisher;
 
-import java.util.function.Consumer;
+import lombok.Data;
 
-import io.cloudevents.CloudEvent;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author David Turanski
  **/
-public interface CloudEventPublisher {
+@ConfigurationProperties(prefix = "cloudevent.publisher")
+@Data
+public class WebClientProperties {
 
-	CloudEvent publish(Object data);
+	private String targetUri;
 
-	CloudEvent publish(Object data, Consumer consumer);
-
+	private int timeoutMs;
 }

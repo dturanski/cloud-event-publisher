@@ -16,8 +16,6 @@
 
 package org.dturanski.cloudevents.publisher;
 
-import java.util.function.Consumer;
-
 import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -32,30 +30,17 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
  * @author David Turanski
  **/
 @Slf4j
-public class WebClientCloudEventPublisher implements CloudEventPublisher {
+public class CloudEventPublisher {
 
 	public final static String CLOUD_EVENT_CONTENT_TYPE = "application/cloudevents+json";
 
-	private final DefaultCloudEventMapper mapper;
+	private final CloudEventMapper mapper;
 
 	private final WebClient client;
 
-	public WebClientCloudEventPublisher(WebClient client, DefaultCloudEventMapper mapper) {
+	public CloudEventPublisher(WebClient client, CloudEventMapper mapper) {
 		this.client = client;
 		this.mapper = mapper;
-	}
-
-	@Override
-	public CloudEvent publish(Object data) {
-		CloudEvent cloudEvent = mapper.apply(data);
-		postCloudEvent(cloudEvent).block();
-		return cloudEvent;
-	}
-	@Override
-	public CloudEvent publish(Object data, Consumer consumer) {
-		CloudEvent cloudEvent = mapper.apply(data);
-		postCloudEvent(cloudEvent).subscribe(consumer::accept);
-		return cloudEvent;
 	}
 
 	public Mono<ClientResponse> convertAndPost(Object data) {
@@ -73,6 +58,7 @@ public class WebClientCloudEventPublisher implements CloudEventPublisher {
 			.contentType(contentType)
 			.syncBody(data)
 			.exchange().doOnNext(response -> {
+				log.trace("POST response status {}", response.statusCode());
 				HttpStatus httpStatus = response.statusCode();
 				if (httpStatus.is4xxClientError() || httpStatus.is5xxServerError()) {
 					throw WebClientResponseException.create(

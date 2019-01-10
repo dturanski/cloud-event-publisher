@@ -23,8 +23,8 @@ import java.util.function.Supplier;
 
 import io.cloudevents.CloudEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.dturanski.cloudevents.publisher.DefaultCloudEventMapper;
-import org.dturanski.cloudevents.publisher.WebClientCloudEventPublisher;
+import org.dturanski.cloudevents.publisher.CloudEventMapper;
+import org.dturanski.cloudevents.publisher.CloudEventPublisher;
 import org.dturanski.cloudevents.publisher.WebClientProperties;
 import reactor.core.publisher.Flux;
 
@@ -46,10 +46,10 @@ public class CloudEventsSourceApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	private WebClientCloudEventPublisher cloudEventsPublisher;
+	private CloudEventPublisher cloudEventsPublisher;
 
 	@Autowired
-	private DefaultCloudEventMapper mapper;
+	private CloudEventMapper mapper;
 
 	public Supplier<Flux<String>> sampleSource() {
 		return () -> Flux.interval(Duration.ofSeconds(1)).map(l -> "Hello World");

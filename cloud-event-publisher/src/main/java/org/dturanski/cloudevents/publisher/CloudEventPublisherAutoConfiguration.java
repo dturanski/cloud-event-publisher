@@ -30,8 +30,8 @@ import org.springframework.web.reactive.function.client.WebClient;
  * @author David Turanski
  **/
 @Configuration
-@EnableConfigurationProperties({ WebClientProperties.class, DefaultCloudEventMapper.class })
-public class CloudEventsPublisherAutoConfiguration {
+@EnableConfigurationProperties({ WebClientProperties.class, CloudEventMapper.class })
+public class CloudEventPublisherAutoConfiguration {
 
 	@Bean
 	public WebClient webClient(WebClientProperties properties) {
@@ -49,9 +49,9 @@ public class CloudEventsPublisherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public WebClientCloudEventPublisher cloudEventPublisher(WebClient client,
-		DefaultCloudEventMapper cloudEventMapper) {
-		return new WebClientCloudEventPublisher(client, cloudEventMapper);
+	public CloudEventPublisher cloudEventPublisher(WebClient client,
+		CloudEventMapper cloudEventMapper) {
+		return new CloudEventPublisher(client, cloudEventMapper);
 	}
 
 }

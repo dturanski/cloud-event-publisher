@@ -43,10 +43,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 	"io.cloudevents.event.content-type=text/plain"
 })
 @RunWith(SpringRunner.class)
-public class DefaultCloudEventMapperTests {
+public class CloudEventMapperTests {
 
 	@Autowired
-	private DefaultCloudEventMapper<String> cloudEventMapper;
+	private CloudEventMapper<String> cloudEventMapper;
 
 	@Autowired
 	private ObjectMapper objectMapper;
